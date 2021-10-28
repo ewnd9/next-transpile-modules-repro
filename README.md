@@ -40,3 +40,13 @@ a2 inside src Object [Module] {}
 # in the other terminal
 $ curl localhost:3000
 ```
+
+## Webpack
+
+```sh
+$ rm -rf dist && node ./webpack-build && node dist/bundle
+a3 inside node_modules Object [Module] {}
+a2 inside node_modules Object [Module] {}
+a1 {}
+a2 Object [Module] {}
+```
