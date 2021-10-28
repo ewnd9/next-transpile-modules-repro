@@ -1,0 +1,21 @@
+{
+  "name": "next-party",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "dependencies": {
+    "a-1": "file:./packages/a-1",
+    "a-2": "file:./packages/a-2",
+    "a-3": "file:./packages/a-3",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.33",
+    "@types/react-dom": "^17.0.8",
+    "next": "^12.0.1",
+    "next-transpile-modules": "^9.0.0",
+    "tslib": "2.3.1",
+    "typescript": "^4.4.2"
+  }
+}
