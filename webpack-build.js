@@ -1,11 +1,5 @@
 const path = require('path');
-const {
-  ProfilingPlugin,
-} = require('next/dist/build/webpack/plugins/profiling-plugin');
-const { trace } = require('next/dist/trace');
-const { init } = require('next/dist/compiled/webpack/webpack');
-init();
-const { webpack } = require('next/dist/compiled/webpack/webpack');
+const { webpack } = require('webpack');
 
 webpack(getConfig(['a-3']), (err, stats) => {
   if (err || stats.hasErrors()) {
@@ -17,7 +11,7 @@ webpack(getConfig(['a-3']), (err, stats) => {
 function getConfig(externalModules) {
   const config = {
     mode: 'production',
-    entry: './webpack-entry.js',
+    entry: './index.js',
     output: {
       publicPath: '/',
       path: path.resolve(__dirname, 'dist'),
@@ -27,11 +21,6 @@ function getConfig(externalModules) {
       minimize: false,
     },
     target: 'node12.22',
-    plugins: [
-      new ProfilingPlugin({
-        runWebpackSpan: trace('hot-reloader'),
-      }),
-    ],
     externals: async (options) => {
       if (externalModules.includes(options.request)) {
         return `module ${options.request}`;
