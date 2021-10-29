@@ -4,9 +4,7 @@
   "private": true,
   "license": "UNLICENSED",
   "dependencies": {
-    "a-1": "file:./packages/a-1",
-    "a-2": "file:./packages/a-2",
-    "a-3": "file:./packages/a-3",
+    "a-3": "link:./packages/a-3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

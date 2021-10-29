@@ -53,4 +53,5 @@ a2 Object [Module] {}
 
 ## Notes
 
-https://github.com/vercel/next.js/discussions/27876
+- https://github.com/vercel/next.js/discussions/27876
+- https://github.com/vercel/next.js/blob/82001f2d54/packages/next/build/webpack-config.ts#L883-L895

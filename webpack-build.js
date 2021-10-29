@@ -7,14 +7,14 @@ const { init } = require('next/dist/compiled/webpack/webpack');
 init();
 const { webpack } = require('next/dist/compiled/webpack/webpack');
 
-webpack(getConfig(), (err, stats) => {
+webpack(getConfig(['a-3']), (err, stats) => {
   if (err || stats.hasErrors()) {
     console.error(stats);
     process.exit(1);
   }
 });
 
-function getConfig() {
+function getConfig(externalModules) {
   const config = {
     mode: 'production',
     entry: './webpack-entry.js',
@@ -33,27 +33,9 @@ function getConfig() {
       }),
     ],
     externals: async (options) => {
-      if (['a-3'].includes(options.request)) {
+      if (externalModules.includes(options.request)) {
         return `module ${options.request}`;
       }
-    },
-    module: {
-      rules: [
-        {
-          test: /\.js/,
-          use: {
-            loader: require.resolve(
-              'next/dist/build/webpack/loaders/next-swc-loader'
-            ),
-            options: {
-              isServer: true,
-              pagesDir: `${__dirname}/src/pages`,
-              hasReactRefresh: false,
-            },
-          },
-          type: 'javascript/auto',
-        },
-      ],
     },
   };
 
