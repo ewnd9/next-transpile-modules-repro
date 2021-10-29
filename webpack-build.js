@@ -6,8 +6,6 @@ const { trace } = require('next/dist/trace');
 const { init } = require('next/dist/compiled/webpack/webpack');
 init();
 const { webpack } = require('next/dist/compiled/webpack/webpack');
-const enhancedResolve = require('enhanced-resolve');
-const CWD = process.cwd();
 
 webpack(getConfig(), (err, stats) => {
   if (err || stats.hasErrors()) {
@@ -28,12 +26,17 @@ function getConfig() {
     optimization: {
       minimize: false,
     },
-    target: 'node',
+    target: 'node12.22',
     plugins: [
       new ProfilingPlugin({
         runWebpackSpan: trace('hot-reloader'),
       }),
     ],
+    externals: async (options) => {
+      if (['a-3'].includes(options.request)) {
+        return `module ${options.request}`;
+      }
+    },
     module: {
       rules: [
         {
@@ -48,7 +51,6 @@ function getConfig() {
               hasReactRefresh: false,
             },
           },
-          include: getMatcher(['a-1', 'a-2']),
           type: 'javascript/auto',
         },
       ],
@@ -56,54 +58,4 @@ function getConfig() {
   };
 
   return config;
-}
-
-function getMatcher(modules) {
-  const createWebpackMatcher = (modulesToTranspile) => {
-    const modulePathsWithDepth = modulesToTranspile.map((modulePath) => [
-      modulePath,
-      (modulePath.match(/node_modules/g) || []).length,
-    ]);
-
-    return (filePath) => {
-      const nodeModulesDepth = (filePath.match(/node_modules/g) || []).length;
-
-      return modulePathsWithDepth.some(([modulePath, moduleDepth]) => {
-        const transpiled =
-          filePath.startsWith(modulePath) && nodeModulesDepth === moduleDepth;
-        if (transpiled) console.log(`transpiled: ${filePath}`);
-        return transpiled;
-      });
-    };
-  };
-
-  const resolve = enhancedResolve.create.sync({
-    symlinks: true,
-    extensions: [
-      '.js',
-      '.jsx',
-      '.ts',
-      '.tsx',
-      '.mjs',
-      '.css',
-      '.scss',
-      '.sass',
-    ],
-    mainFields: ['main', 'module', 'source'],
-    conditionNames: ['require'],
-    exportsFields: [],
-  });
-
-  const getPackageRootDirectory = (module) => {
-    try {
-      packageLookupDirectory = resolve(CWD, path.join(module, 'package.json'));
-      return path.dirname(packageLookupDirectory);
-    } catch (err) {
-      throw new Error(
-        `next-transpile-modules - an unexpected error happened when trying to resolve "${module}". Are you sure the name of the module you are trying to transpile is correct, and it has a package.json with a "main" or an "exports" field?\n${err}`
-      );
-    }
-  };
-
-  return createWebpackMatcher(modules.map(getPackageRootDirectory));
 }

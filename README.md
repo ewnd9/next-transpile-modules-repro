@@ -50,3 +50,7 @@ a2 inside node_modules Object [Module] {}
 a1 {}
 a2 Object [Module] {}
 ```
+
+## Notes
+
+https://github.com/vercel/next.js/discussions/27876
